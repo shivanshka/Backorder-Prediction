@@ -1,0 +1,35 @@
+training_pipeline_config:
+  pipeline_name: Backorder_Prediction_Files
+  artifact_dir: artifact
+
+data_ingestion_config:
+  download_url:
+  raw_data_dir: raw_data
+  zipped_download_dir: zipped_data
+  ingested_dir: ingested_data
+  ingested_train_dir: train
+  ingested_test_dir: test
+
+data_validation_config:
+  schema_dir: config
+  schema_file_name: schema.yaml
+  report_file_name: report.json
+  report_page_file_name: report.html
+
+data_transformation_config:
+  transformed_dir: transformed_data
+  transformed_train_dir: train
+  transformed_test_dir: test
+  preprocessing_dir: preprocessed
+  preprocessed_object_file_name: preprocessed.pkl
+
+model_trainer_config:
+  trained_model_dir: trained_model
+  model_file_name: model.pkl
+  base_accuracy: 0.6
+
+model_evaluation_config:
+  model_evaluation_file_name: model_evaluation.yaml
+
+model_pusher_config:
+  model_export_dir: saved_models
