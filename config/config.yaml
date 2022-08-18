@@ -1,5 +1,5 @@
 training_pipeline_config:
-  pipeline_name: Backorder_Prediction_Files
+  pipeline_name: Backorder_Prediction_Pipeline
   artifact_dir: artifact
 
 data_ingestion_config:
