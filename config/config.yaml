@@ -3,7 +3,7 @@ training_pipeline_config:
   artifact_dir: artifact
 
 data_ingestion_config:
-  download_url:
+  download_url: https://github.com/shivanshka/dataset/blob/main/backorder_dataset.rar?raw=true
   raw_data_dir: raw_data
   zipped_download_dir: zipped_data
   ingested_dir: ingested_data
