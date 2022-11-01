@@ -28,7 +28,7 @@ class Model_Trainer:
             logging.info("Running Hyperparameter Tuning for Easy Ensemble Classifier")
             params = {"n_estimators" : [10, 20, 30, 50, 100],"sampling_strategy":["auto"]}
             easy_gs = GridSearchCV(EasyEnsembleClassifier(random_state=2021), 
-                 param_grid=params, scoring="roc_auc", cv=5, refit=True, verbose=False)
+                 param_grid=params, scoring="roc_auc", cv=5, refit=True, verbose=2)
             easy_gs.fit(X_train, y_train)
             best_params = easy_gs.best_params_
             return best_params
@@ -43,7 +43,7 @@ class Model_Trainer:
                       "criterion": ["gini"],
                       "sampling_strategy": ["auto"]}
             brf_grid = GridSearchCV(BalancedRandomForestClassifier(random_state=2021), 
-                 param_grid=params, scoring="roc_auc", cv=5, refit=True, verbose=False)
+                 param_grid=params, scoring="roc_auc", cv=5, refit=True, verbose=2)
             brf_grid.fit(X_train, y_train)
 
             best_params = brf_grid.best_params_
