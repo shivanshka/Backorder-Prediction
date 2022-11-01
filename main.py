@@ -3,7 +3,7 @@ from flask import Flask, render_template,request, send_file, redirect,url_for,fl
 from flask_cors import CORS, cross_origin
 #from Prediction_Application.pipeline.prediction_pipeline import Prediction
 from Backorder.pipeline.training_pipeline import Training_Pipeline
-from Backorder.constant import *
+from Backorder.contants import *
 from Backorder.logger import logging
 import os
 import sys
@@ -23,7 +23,7 @@ def home():
 def bulk_predict():
     try:
         file = request.files.get("files")
-        #folder = PREDICTION_DATA_SAVING_FOLDER_KEY
+        folder = PREDICTION_DATA_SAVING_FOLDER_KEY
 
         flash("File uploaded!!","success")
 
