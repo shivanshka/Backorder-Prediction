@@ -1,8 +1,9 @@
 from Backorder.config.configuration import Configuration
 from Backorder.entity.config_entity import DataIngestionConfig,DataValidationConfig,DataTransformationConfig
-from Backorder.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact
+from Backorder.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact,DataTransformationArtifact
 from Backorder.components.data_ingestion import DataIngestion
 from Backorder.components.data_validation import DataValidation
+from Backorder.components.data_transformation import DataTransformation
 from Backorder.contants import *
 from Backorder.logger import logging
 from Backorder.exception import ApplicationException
@@ -33,7 +34,7 @@ class Training_Pipeline:
             return data_validation.initiate_data_validation()
         except Exception as e:
             raise ApplicationException(e,sys) from e
-    """
+    
     def start_data_transformation(self,data_ingestion_artifact: DataIngestionArtifact,
                                        data_validation_artifact: DataValidationArtifact) -> DataTransformationArtifact:
         try:
@@ -45,7 +46,7 @@ class Training_Pipeline:
             return data_transformation.initiate_data_transformation()
         except Exception as e:
             raise ApplicationException(e,sys) from e
-
+    
     def start_model_training(self,data_transformation_artifact: DataTransformationArtifact) -> ModelTrainerArtifact:
         try:
             model_trainer = ModelTrainer(model_trainer_config=self.config.get_model_trainer_config(),
@@ -54,7 +55,7 @@ class Training_Pipeline:
             return model_trainer.initiate_model_training()
         except Exception as e:
             raise ApplicationException(e,sys) from e               
-"""
+
     def run_training_pipeline(self):
         try:
             data_ingestion_config=self.config.get_data_ingestion_config()
@@ -64,10 +65,10 @@ class Training_Pipeline:
             data_validation_artifact = self.start_data_validation(data_ingestion_config=data_ingestion_config,
                                                             data_ingestion_artifact=data_ingestion_artifact)
 
-            #data_transformation_artifact = self.start_data_transformation(data_ingestion_artifact=data_ingestion_artifact,
-            #                                                 data_validation_artifact=data_validation_artifact)
+            data_transformation_artifact = self.start_data_transformation(data_ingestion_artifact=data_ingestion_artifact,
+                                                             data_validation_artifact=data_validation_artifact)
 
-            #model_trainer_artifact = self.start_model_training(data_transformation_artifact=data_transformation_artifact)         
+            model_trainer_artifact = self.start_model_training(data_transformation_artifact=data_transformation_artifact)         
         except Exception as e:
             raise ApplicationException(e,sys) from e
 
