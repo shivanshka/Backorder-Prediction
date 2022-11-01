@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 import os
+import sys
 
 LOG_DIR = "Application_Logs"
 
@@ -15,5 +16,6 @@ LOG_FILE_PATH = os.path.join(LOG_DIR,LOG_FILE_NAME)
 logging.basicConfig(filename=LOG_FILE_PATH,
     filemode="w",
     level=logging.INFO,
-    format= "[%(asctime)s] %(name)s - %(levelname)s - %(message)s"
+    format= "[%(asctime)s] %(name)s - %(levelname)s - %(message)s",
+    
 )
