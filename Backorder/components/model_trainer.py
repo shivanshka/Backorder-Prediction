@@ -117,7 +117,7 @@ class Model_Trainer:
 
     def best_model_selector(self, X_train, y_train, X_test, y_test):
         try:
-            logging.info(f"{"*"*20} Training Easy Ensemble Classifier {"*"*20}")
+            logging.info(f'{"*"*20} Training Easy Ensemble Classifier {"*"*20}')
             easy_ensemble = self.EasyEnsemble_Classifier(X_train, y_train)
             
             logging.info(f"Calculating Test ROC AUC Score..........")
@@ -125,9 +125,9 @@ class Model_Trainer:
             easy_ensemble_test_auc_score = roc_auc_score(y_test, easy_test_preds)
             logging.info(f"Test ROC AUC Score: {easy_ensemble_test_auc_score}")
 
-            logging.info(f"{"*"*20} Training Easy Ensemble Classifier Completed Successfully!! {"*"*20}")
+            logging.info(f'{"*"*20} Training Easy Ensemble Classifier Completed Successfully!! {"*"*20}')
 
-            logging.info(f"{"*"*20} Training Balanced RandomForest Classifier {"*"*20}")
+            logging.info(f'{"*"*20} Training Balanced RandomForest Classifier {"*"*20}')
             balanced_rf = self.BalancedRF_Classifier(X_train, y_train)
 
             logging.info(f"Calculating Test ROC AUC Score..........")
@@ -135,7 +135,7 @@ class Model_Trainer:
             balanced_rf_test_auc_score = roc_auc_score(y_test, brf_test_preds)
             logging.info(f"Test ROC AUC Score: {balanced_rf_test_auc_score}")
 
-            logging.info(f"{"*"*20} Training Balanced RandomForest Classifier Completed Successfully!! {"*"*20}")
+            logging.info(f'{"*"*20} Training Balanced RandomForest Classifier Completed Successfully!! {"*"*20}')
 
             if easy_ensemble_test_auc_score > balanced_rf_test_auc_score:
                 best_model = easy_ensemble

@@ -1,7 +1,7 @@
 from Backorder.pipeline.training_pipeline import Training_Pipeline
 from Backorder.logger import logging
 
-def run():
+def main():
     try:
         train = Training_Pipeline()
         train.run_training_pipeline()
@@ -9,4 +9,4 @@ def run():
         logging.error(e)
 
 if __name__=="__main__":
-    run()
+    main()

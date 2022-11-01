@@ -1,9 +1,12 @@
 from Backorder.config.configuration import Configuration
-from Backorder.entity.config_entity import DataIngestionConfig,DataValidationConfig,DataTransformationConfig
-from Backorder.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact,DataTransformationArtifact
+from Backorder.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig,
+                                            ModelTrainerConfig)
+from Backorder.entity.artifact_entity import (DataIngestionArtifact, DataValidationArtifact, 
+                                            DataTransformationArtifact, ModelTrainerArtifact)
 from Backorder.components.data_ingestion import DataIngestion
 from Backorder.components.data_validation import DataValidation
 from Backorder.components.data_transformation import DataTransformation
+from Backorder.components.model_trainer import Model_Trainer
 from Backorder.contants import *
 from Backorder.logger import logging
 from Backorder.exception import ApplicationException
@@ -49,7 +52,7 @@ class Training_Pipeline:
     
     def start_model_training(self,data_transformation_artifact: DataTransformationArtifact) -> ModelTrainerArtifact:
         try:
-            model_trainer = ModelTrainer(model_trainer_config=self.config.get_model_trainer_config(),
+            model_trainer = Model_Trainer(model_trainer_config=self.config.get_model_trainer_config(),
                                         data_transformation_artifact=data_transformation_artifact)   
 
             return model_trainer.initiate_model_training()
