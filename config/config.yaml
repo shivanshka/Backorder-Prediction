@@ -21,6 +21,7 @@ data_transformation_config:
   transformed_train_dir: train
   transformed_test_dir: test
   preprocessing_dir: preprocessed
+  feature_eng_object_file_name: feat_eng.pkl
   preprocessed_object_file_name: preprocessed.pkl
 
 model_trainer_config:

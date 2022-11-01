@@ -26,15 +26,10 @@ Columns:
 target_column: went_on_backorder  
 
 categorical_columns: 
-  - potential_issue
-  - local_bo_qty
   - deck_risk
-  - oe_constraint
   - ppap_risk
-  - stop_auto_buy
-  - rev_stop
+
 numerical_columns: 
-  - sku
   - national_inv
   - lead_time
   - in_transit_qty
@@ -49,3 +44,4 @@ numerical_columns:
   - pieces_past_due
   - perf_6_month_avg
   - perf_12_month_avg
+  - local_bo_qty
