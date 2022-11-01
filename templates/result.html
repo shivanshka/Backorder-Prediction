@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rental Bike Share Demand Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <style>
+        .sales-input {
+            padding-top: 20px;
+            padding-right: 20px;
+            font-weight: bold;
+            width: 100%;
+            background-color: #cce2f5;
+        }
+
+        .file-input {
+            font-weight: bold;
+            width: 40%;
+        }
+
+        .title {
+            text-align: center;
+            font-weight: bold;
+
+            font-size: 30px;
+            background-color: #f5ed85;
+            padding-top: 10px;
+            font-weight: bold;
+            padding-bottom: 10px;
+            color: #273582;
+            font-family: 'Lucida Sans';
+        }
+        .header_1{
+            padding-left: 50px;
+        }
+        .logo_image{
+            display: inline-block;
+            width:0%;
+        }
+        .logo_title{
+            display: inline-block;
+            text-align: left;
+            vertical-align: bottom;
+            width:90%;
+            ;
+        }
+        .header2{
+            display: inline;
+            font-size: 35px;
+            color: #967008;
+            font-weight: bold;
+            padding-left: 260px;
+            font-family: 'Gill Sans MT';
+        }
+        .footer{
+            position: relative;
+            bottom:0px;
+            width:100%;
+            text-align: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background-color: #3a3939;
+            color: #d1d1d4;
+        }
+        .github_image{
+            border-radius: 5px;
+            width: 30px;
+            height: 30px;
+        }
+        .linkedin_image{
+            border-radius: 5px;
+            width: 30px;
+            height: 30px;
+        }
+        .logo{
+            width: 250px;
+            height: 70px;
+        }
+        .col{
+            padding-left: 50px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <header class="header_1">
+        <div class="logo_image">
+            <a href="/" class="" data-image-width="430" data-image-height="117">
+                <img src="{{ url_for('static', filename='img/index.png') }}" class="logo">
+            </a>
+        </div>
+        <div class="logo_title">
+            <h3 class="header2">Internship Project</h3>
+        </div>
+    </header>
+    <div class="title">Rental Bike Share Demand Prediction</div>
+
+    
+    <div class="sales-input">
+        <!-- main row -->
+        <div class="row">
+            <!-- file input column -->
+            <div class="col file-input">
+                <form action="/bulk_predict" method="POST" enctype="multipart/form-data">
+                    <label for="">Upload dataset</label>
+                    <div class="input-group mb-3 my-2">
+                        <input type="file" multiple class="form-control" id="inputGroupFile01" name="files">
+                    </div>
+                    <center>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary my-2" type="submit">Predict</button>
+                        </div>
+                    </center>
+                </form>
+            </div>
+
+            <!-- user input column -->
+            <div class="col">
+                <!-- Alert Message -->
+                {% with message = get_flashed_messages(with_categories=true) %}
+                {% if message %}
+                {% for category, msg in message %}
+                <div class="message">
+                    <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                        {{msg}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <form action="/single_predict" method="POST">
+                    <!-- 1st row -->
+                    <div class="row">
+                        <div class="col">
+                            <label>Date</label>
+                            <input class="form-control" placeholder="Enter date in yyyy-mm-dd format" type="text" aria-label="default input example"
+                                name="date">
+                        </div>
+                        <div class="col">
+                            <label>Month</label>
+                            <select class="form-select" aria-label="Default select example" name="month">
+                                <option selected>Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">Febraury</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 2nd row -->
+                    <div class="row my-2">
+                        <div class="col">
+                            <label>Hour</label>
+                            <input class="form-control" placeholder="Enter hour between 0 to 23" type="text" aria-label="default input example"
+                                name="hour">
+                        </div>
+                        <div class="col">
+                            <label>Season</label>
+                            <select class="form-select" aria-label="Default select example" name="season">
+                                <option selected>Select Season</option>
+                                <option value="1">Winter</option>
+                                <option value="2">Spring</option>
+                                <option value="3">Summer</option>
+                                <option value="4">Fall</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 3rd row -->
+                    <div class="row my-2">
+                        <div class="col">
+                            <label>Weekday</label>
+                            <select class="form-select" aria-label="Default select example" name="weekday">
+                                <option selected>Select Weekday</option>
+                                <option value="0">Monday</option>
+                                <option value="1">Tuesday</option>
+                                <option value="2">Wednesday</option>
+                                <option value="3">Thursday</option>
+                                <option value="4">Friday</option>
+                                <option value="5">Saturday</option>
+                                <option value="6">Sunday</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>Holiday</label>
+                            <select class="form-select" aria-label="Default select example" name="is_holiday">
+                                <option selected>Select</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 4th row -->
+                    <div class="row my-2">
+                        <div class="col">
+                            <label>Working Day</label>
+                            <select class="form-select" aria-label="Default select example" name="working">
+                                <option selected>Select</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>Covid Year</label>
+                            <select class="form-select" aria-label="Default select example" name="is_covid">
+                                <option selected>Select</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!-- 5th row -->
+                    <div class="row my-2">
+                        <div class="col">
+                            <label>Weather Condition</label>
+                            <select class="form-select" aria-label="Default select example" name="weather_sit">
+                                <option selected>Select Condition</option>
+                                <option value="1">Clear, Few clouds, Partly cloudy, Partly cloudy</option>
+                                <option value="2"> Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist</option>
+                                <option value="3">Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds</option>
+                                <option value="4">Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>Temperature</label>
+                            <input class="form-control" placeholder="Enter temperature in celcius" type="text" aria-label="default input example"
+                                name="temp">
+                        </div>
+                    </div>
+
+                    <!-- 6th row -->
+                    <div class="row my-2">
+                        <div class="col">
+                            <label>Wind Speed</label>
+                            <input class="form-control" placeholder="Enter wind speed in kmph" type="text" aria-label="default input example"
+                                name="wind">
+                        </div>
+
+                        <div class="col">
+                            <label>Humidity</label>
+                            <input class="form-control" placeholder="Enter humidity in %" type="text" aria-label="default input example"
+                                name="humidity">
+                        </div>
+
+                    </div>
+
+                    <center>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary my-2" type="submit">Predict</button>
+                        </div>
+                    </center>
+
+                </form>
+                    
+            </div>
+
+            
+        </div>
+
+    </div>
+    
+    <footer class="u-align-center u-clearfix u-footer u-grey-80 footer" id="sec-a78b"><div class="u-align-left u-clearfix u-sheet u-sheet-1">
+        <a href="https://github.com/shivanshka/Rental_Bike_Share_Prediction.git" class="github" data-image-width="100" data-image-height="100" title="Source code" target="_blank">
+          <img src="{{ url_for('static', filename='img/git.png') }}" class="github_image">
+        </a>
+        <a href="https://www.linkedin.com/in/shivansh-ka" class="linkedin" data-image-width="100" data-image-height="100" title="Developen Linkedin Id" target="_blank">
+            <img src="{{ url_for('static', filename='img/linkied.png') }}" class="linkedin_image">
+          </a>
+        <p class="footer-text">Created by Shivansh Kaushal and Chirag Sharma</p>
+      </div></footer>
+    
+</body>
+
+</html>

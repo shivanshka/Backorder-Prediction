@@ -6,6 +6,7 @@ flask-cors
 gunicorn
 patool
 PyYAML
+pyunpack
 dill
 evidently
 imblearn
