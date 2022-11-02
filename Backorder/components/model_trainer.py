@@ -148,6 +148,7 @@ class Model_Trainer:
 
     def initiate_model_training(self):
         try:
+            
             logging.info("Finding transformed Training and Test")
             transformed_train_file_path = self.data_transformation_artifact.transformed_train_file_path
             transformed_test_file_path = self.data_transformation_artifact.transformed_test_file_path
@@ -168,18 +169,19 @@ class Model_Trainer:
 
             trained_model = self.best_model_selector(train_input_feature, train_target_feature, test_input_feature, test_target_feature)
             
-            trained_model_file_path = self.model_trainer_config.trained_model_file_path
-
-            save_object(trained_model_file_path, trained_model)
+            logging.info("Saving best model object file")
+            trained_model_object_file_path = self.model_trainer_config.trained_model_file_path
+            save_object(file_path=trained_model_object_file_path, obj=trained_model)
             #save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY,
             #                     os.path.basename(trained_model_object_file_path)),obj=model_obj)
 
-            model_training_artifact = ModelTrainerArtifact(is_trained= "Yes", 
-                                                           message= "Model Training Done!", 
-                                                           trained_model_file_path=trained_model_file_path,
-                                                           )
-            logging.info(f"Model Training Artifact : [{model_training_artifact}]")
-            return model_training_artifact
+
+            model_trainer_artifact = ModelTrainerArtifact(is_trained=True, 
+                                                          message="Model Training Done!!",
+                                                          trained_model_file_path=trained_model_object_file_path)
+            
+            logging.info(f"Model Trainer Artifact: {model_trainer_artifact}")
+            return model_trainer_artifact
         except Exception as e:
             raise ApplicationException(e,sys) from e
 

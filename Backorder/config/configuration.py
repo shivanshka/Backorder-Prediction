@@ -118,7 +118,7 @@ class Configuration:
 
             model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
 
-            model_trainer_artifact_dir = os.path.join(ROOT_DIR,
+            model_trainer_artifact_dir = os.path.join(artifact_dir,
                                                       MODEL_TRAINER_ARTIFACT_DIR_KEY,
                                                       self.time_stamp)
 
@@ -127,6 +127,7 @@ class Configuration:
                                                    
             model_trainer_config = ModelTrainerConfig(trained_model_file_path=trained_model_file_path,
                                                       base_accuracy=0.6)
+            return model_trainer_config
         except Exception as e:
             raise ApplicationException(e,sys) from e
 
