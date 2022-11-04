@@ -77,9 +77,10 @@ class Model_Trainer:
                 train_auc_scores.append(train_auc)
                 test_auc_scores.append(test_auc) 
             
+            logging.info(f"Fold: {fold} done!!!...")
             logging.info(f"Train Mean ROC AUC Score for 5 fold : {np.mean(train_auc_scores)}")
             logging.info(f"Validation Mean ROC AUC Score for 5 fold : {np.mean(test_auc_scores)}")
-            return model
+            return (model, np.mean(train_auc_scores))
         except Exception as e:
             raise ApplicationException(e,sys) from e
 
@@ -109,16 +110,17 @@ class Model_Trainer:
                 train_auc_scores.append(train_auc)
                 test_auc_scores.append(test_auc)
             
+            logging.info(f"Fold: {fold} done!!!...")
             logging.info(f"Train Mean ROC AUC Score for 5 fold : {np.mean(train_auc_scores)}")
             logging.info(f"Validation Mean ROC AUC Score for 5 fold : {np.mean(test_auc_scores)}")
-            return model
+            return (model, np.mean(train_auc_scores))
         except Exception as e:
             raise ApplicationException(e,sys) from e
 
     def best_model_selector(self, X_train, y_train, X_test, y_test):
         try:
             logging.info(f'{"*"*20} Training Easy Ensemble Classifier {"*"*20}')
-            easy_ensemble = self.EasyEnsemble_Classifier(X_train, y_train)
+            easy_ensemble = self.EasyEnsemble_Classifier(X_train, y_train)[0]
             
             logging.info(f"Calculating Test ROC AUC Score..........")
             easy_test_preds = easy_ensemble.predict_proba(X_test)[:,1]
@@ -128,7 +130,7 @@ class Model_Trainer:
             logging.info(f'{"*"*20} Training Easy Ensemble Classifier Completed Successfully!! {"*"*20}')
 
             logging.info(f'{"*"*20} Training Balanced RandomForest Classifier {"*"*20}')
-            balanced_rf = self.BalancedRF_Classifier(X_train, y_train)
+            balanced_rf = self.BalancedRF_Classifier(X_train, y_train)[0]
 
             logging.info(f"Calculating Test ROC AUC Score..........")
             brf_test_preds = balanced_rf.predict_proba(X_test)[:,1]
@@ -137,11 +139,24 @@ class Model_Trainer:
 
             logging.info(f'{"*"*20} Training Balanced RandomForest Classifier Completed Successfully!! {"*"*20}')
 
+            logging.info("Selecting best model------>")
             if easy_ensemble_test_auc_score > balanced_rf_test_auc_score:
-                best_model = easy_ensemble
-            else:
-                best_model = balanced_rf
+                if( easy_ensemble[1]-easy_ensemble_test_auc_score) < (balanced_rf[1]-balanced_rf_test_auc_score):
+                    model_name="EasyEnsemble"
+                    best_model = easy_ensemble
+                elif balanced_rf_test_auc_score>self.model_trainer_config.base_accuracy:
+                    model_name="Balanced Random Forest"
+                    best_model = balanced_rf
 
+            else:
+                if( easy_ensemble[1]-easy_ensemble_test_auc_score) > (balanced_rf[1]-balanced_rf_test_auc_score):
+                    model_name="Balanced Random Forest"
+                    best_model = balanced_rf
+                elif easy_ensemble_test_auc_score>self.model_trainer_config.base_accuracy:
+                    model_name="EasyEnsemble"
+                    best_model = easy_ensemble
+
+            logging.info(f"{model_name} model is selected......")
             return best_model
         except Exception as e:
             raise ApplicationException(e,sys) from e
@@ -172,8 +187,8 @@ class Model_Trainer:
             logging.info("Saving best model object file")
             trained_model_object_file_path = self.model_trainer_config.trained_model_file_path
             save_object(file_path=trained_model_object_file_path, obj=trained_model)
-            #save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY,
-            #                     os.path.basename(trained_model_object_file_path)),obj=model_obj)
+            save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY,
+                                 os.path.basename(trained_model_object_file_path)),obj=trained_model)
 
 
             model_trainer_artifact = ModelTrainerArtifact(is_trained=True, 

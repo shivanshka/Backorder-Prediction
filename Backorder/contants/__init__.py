@@ -56,3 +56,9 @@ MODEL_TRAINER_ARTIFACT_DIR_KEY = "model_trainer"
 MODEL_TRAINER_DIR_NAME_KEY = "trained_model_dir"
 MODEL_TRAINER_FILE_NAME_KEY = "model_file_name"
 MODEL_TRAINER_BASE_ACCURACY_KEY = "base_accuracy"
+
+# Prediction related variables
+PIKLE_FOLDER_NAME_KEY = "Prediction_Objects"
+PREDICTION_OUTPUT_FOLDER_NAME_KEY = "Output_Folder"
+PREDICTION_DATA_SAVING_FOLDER_KEY = "Prediction_Batch_File"
+APP_SECRET_KEY = "any random string"
