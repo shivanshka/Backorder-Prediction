@@ -60,5 +60,6 @@ MODEL_TRAINER_BASE_ACCURACY_KEY = "base_accuracy"
 # Prediction related variables
 PIKLE_FOLDER_NAME_KEY = "Prediction_Objects"
 PREDICTION_OUTPUT_FOLDER_NAME_KEY = "Output_Folder"
+SERVING_MODEL_NAME_KEY = "Serving_model"
 PREDICTION_DATA_SAVING_FOLDER_KEY = "Prediction_Batch_File"
 APP_SECRET_KEY = "any random string"
