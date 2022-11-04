@@ -187,7 +187,7 @@ class Model_Trainer:
             logging.info("Saving best model object file")
             trained_model_object_file_path = self.model_trainer_config.trained_model_file_path
             save_object(file_path=trained_model_object_file_path, obj=trained_model)
-            save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY,
+            save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY, SERVING_MODEL_NAME_KEY,
                                  os.path.basename(trained_model_object_file_path)),obj=trained_model)
 
 
