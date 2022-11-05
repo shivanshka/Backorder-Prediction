@@ -166,13 +166,13 @@ class DataTransformation:
             logging.info("Saving Feature Engineering Object")
             feature_eng_object_file_path = self.data_transformation_config.feature_eng_object_file_path
             save_object(file_path = feature_eng_object_file_path,obj = fe_obj)
-            save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY, DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY,
+            save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY, "preprocessed",
                                 os.path.basename(feature_eng_object_file_path)),obj=fe_obj)
 
             logging.info("Saving Preprocessing Object")
             preprocessing_object_file_path = self.data_transformation_config.preprocessed_object_file_path
             save_object(file_path = preprocessing_object_file_path, obj = preprocessing_obj)
-            save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY, DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY,
+            save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY, "preprocessed",
                                  os.path.basename(preprocessing_object_file_path)),obj=preprocessing_obj)
 
             data_transformation_artifact = DataTransformationArtifact(

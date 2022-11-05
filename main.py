@@ -1,7 +1,7 @@
 
 from flask import Flask, render_template,request, send_file, redirect,url_for,flash
 from flask_cors import CORS, cross_origin
-#from Prediction_Application.pipeline.prediction_pipeline import Prediction
+from Backorder.pipeline.prediction_pipeline import PredictionServices
 from Backorder.pipeline.training_pipeline import Training_Pipeline
 from Backorder.contants import *
 from Backorder.logger import logging
@@ -11,7 +11,7 @@ import shutil
 
 app = Flask(__name__)
 CORS(app)
-#app.secret_key = APP_SECRET_KEY
+app.secret_key = APP_SECRET_KEY
 
 @app.route("/", methods =["GET"])
 @cross_origin()
@@ -33,7 +33,7 @@ def bulk_predict():
 
         file.save(os.path.join(folder,file.filename))
 
-        pred = Prediction()
+        pred = PredictionServices()
         output_file = pred.initiate_bulk_prediction()
         path = os.path.basename(output_file)
 
@@ -62,7 +62,7 @@ def single_predict():
                 'wind': float(request.form['wind']),
                 'humidity': float(request.form['humidity'])}
 
-        pred = Prediction()
+        pred = PredictionServices()
         output = pred.initiate_single_prediction(data)
         flash(f"Predicted Demand for Bike for given conditions: {output}","success")
         return redirect(url_for('home'))
