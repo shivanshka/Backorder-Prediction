@@ -10,6 +10,9 @@ CONFIG_DIR = "config"
 CONFIG_FILE_NAME = "config.yaml"
 CONFIG_FILE_PATH = os.path.join(ROOT_DIR,CONFIG_DIR,CONFIG_FILE_NAME)
 
+MODEL_YAML_FILE_NAME = "models.yaml"
+MODEL_YAML_FILE_PATH = os.path.join(ROOT_DIR,CONFIG_DIR,MODEL_YAML_FILE_NAME)
+
 CURRENT_TIME_STAMP = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
 
 
@@ -63,3 +66,4 @@ PREDICTION_OUTPUT_FOLDER_NAME_KEY = "Output_Folder"
 SERVING_MODEL_NAME_KEY = "Serving_model"
 PREDICTION_DATA_SAVING_FOLDER_KEY = "Prediction_Batch_File"
 APP_SECRET_KEY = "any random string"
+THRESHOLD = 0.38

@@ -21,28 +21,6 @@ class Prediction_Validation:
             self.dataset_schema = read_yaml_file(file_path=self.schema_file_path)
         except Exception as e:
             raise ApplicationException(e,sys) from e
-
-    def file_name_check(self,file):
-        try:
-            file_check_status = False
-            sample_file_name = self.dataset_schema["SampleFileName"]
-            length_date_stamp = self.dataset_schema["LengthOfDateStampInFile"]
-            length_time_stamp = self.dataset_schema["LengthOfTimeStampInFile"]
-            
-            regex = "Rental_Bike_Share_Data[\_][\d]+[\_][\d]+\.csv"
-            if (re.match(regex,file)):
-                splitAtDot = re.split(".csv",file)
-                splitAtDot = re.split("_",splitAtDot[0])
-                if len(splitAtDot[4]) == length_date_stamp:
-                    if len(splitAtDot[5]) == length_time_stamp:
-                        file_check_status = True
-            
-            if file_check_status==False:
-                raise Exception(f"File name is not as per the Schema in file: [{file}]")
-            
-            return file_check_status
-        except Exception as e:
-            raise ApplicationException(e,sys) from e
         
     def column_check(self,file):   
         try:
@@ -80,7 +58,7 @@ class Prediction_Validation:
             logging.info("Validating the schema of the dataset")
             validation_status = False
             
-            if self.file_name_check(os.path.basename(self.path)) and self.column_check(os.path.join(self.path)):
+            if self.column_check(os.path.join(self.path)):
                 validation_status = True
                 
             logging.info("Schema Validation Completed")
@@ -143,28 +121,6 @@ class DataValidation:
         except Exception as e:
             raise ApplicationException(e,sys) from e
 
-
-    def file_name_check(self,file):
-        try:
-            file_check_status = False
-            sample_file_name = self.dataset_schema["SampleFileName"]
-            length_date_stamp = self.dataset_schema["LengthOfDateStampInFile"]
-            length_time_stamp = self.dataset_schema["LengthOfTimeStampInFile"]
-            
-            regex = "Rental_Bike_Share_Data[\_][\d]+[\_][\d]+\.csv"
-            if (re.match(regex,file)):
-                splitAtDot = re.split(".csv",file)
-                splitAtDot = re.split("_",splitAtDot[0])
-                if len(splitAtDot[4]) == length_date_stamp:
-                    if len(splitAtDot[5]) == length_time_stamp:
-                        file_check_status = True
-            
-            if file_check_status==False:
-                raise Exception(f"File name is not as per the Schema in file: [{file}]")
-            
-            return file_check_status
-        except Exception as e:
-            raise ApplicationException(e,sys) from e
         
     def column_check(self,file):   
         try:
@@ -266,7 +222,7 @@ class DataValidation:
         try:
             self.validate_dataset_schema()
             self.is_train_test_file_exists()
-            #self.is_data_drift_found()
+            self.is_data_drift_found()
 
             data_validation_artifact = DataValidationArtifact(
                 schema_file_path=self.data_validation_config.schema_file_path,

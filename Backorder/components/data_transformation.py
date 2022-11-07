@@ -60,6 +60,9 @@ class DataTransformation:
             self.data_transformation_config= data_transformation_config
             self.data_ingestion_artifact = data_ingestion_artifact
             self.data_validation_artifact = data_validation_artifact
+            # Reading schema file for columns details
+            schema_file_path = self.data_validation_artifact.schema_file_path
+            self.schema = read_yaml_file(file_path=schema_file_path)
 
         except Exception as e:
             raise ApplicationException(e,sys) from e
@@ -79,10 +82,10 @@ class DataTransformation:
             numerical_columns = data_schema[NUMERICAL_COLUMN_KEY]
             categorical_columns = data_schema[CATEGORICAL_COLUMN_KEY]
 
-            num_pipeline = Pipeline(steps =[("impute", SimpleImputer(strategy="median", add_indicator=True)),
+            num_pipeline = Pipeline(steps =[("impute", SimpleImputer(strategy="median")),
                                             ("scaler",StandardScaler())])
 
-            cat_pipeline = Pipeline(steps = [("impute", SimpleImputer(strategy="most_frequent",add_indicator=True)),
+            cat_pipeline = Pipeline(steps = [("impute", SimpleImputer(strategy="most_frequent")),
                                              ])
 
             preprocessing = ColumnTransformer([('num_pipeline',num_pipeline,numerical_columns),
@@ -91,13 +94,16 @@ class DataTransformation:
         except Exception as e:
             raise ApplicationException(e,sys) from e
 
-    def missing_indicators(self,dff)->list:
-        missing_ind = []
+    """def missing_indicators(self,dff:pd.DataFrame)->list:
+        missing_ind_num = []
+        missing_ind_cat = []
         for feature, val in dff.isnull().sum().to_dict().items():
             if val != 0:
-                missing_ind.append(f"{feature}_missing_indicator")
-
-        return missing_ind
+                if feature in self.schema[NUMERICAL_COLUMN_KEY]:
+                    missing_ind_num.append(f"{feature}_missing_indicator")
+                else:
+                    missing_ind_cat.append(f"{feature}_missing_indicator")
+        return (missing_ind_num,missing_ind_cat)"""
 
     def initiate_data_transformation(self)-> DataTransformationArtifact:
         try:
@@ -109,12 +115,8 @@ class DataTransformation:
             train_df = pd.read_csv(train_file_path, low_memory=False)
             test_df = pd.read_csv(test_file_path, low_memory=False)
 
-            # Reading schema file for columns details
-            schema_file_path = self.data_validation_artifact.schema_file_path
-            schema = read_yaml_file(file_path=schema_file_path)
-
             # Extracting target column name
-            target_column_name = schema[TARGET_COLUMN_KEY]
+            target_column_name = self.schema[TARGET_COLUMN_KEY]
 
             train_df.dropna(subset=[target_column_name],inplace=True)
             test_df.dropna(subset=[target_column_name], inplace=True)
@@ -136,11 +138,11 @@ class DataTransformation:
             feature_eng_train_df = fe_obj.fit_transform(input_feature_train_df)
             feature_eng_test_df = fe_obj.transform(input_feature_test_df)
 
-            train_missing_indicators = self.missing_indicators(feature_eng_train_df)
-            test_missing_indicators = self.missing_indicators(feature_eng_test_df)
+            """train_missing_indicators = self.missing_indicators(feature_eng_train_df)
+            test_missing_indicators = self.missing_indicators(feature_eng_test_df)"""
 
-            numerical_columns = schema[NUMERICAL_COLUMN_KEY] 
-            categorical_columns = schema[CATEGORICAL_COLUMN_KEY]
+            numerical_columns = self.schema[NUMERICAL_COLUMN_KEY] 
+            categorical_columns = self.schema[CATEGORICAL_COLUMN_KEY]
 
             logging.info(f"Obtaining preprocessing object.")
             preprocessing_obj = self.get_data_transformer_object()
@@ -149,10 +151,13 @@ class DataTransformation:
             train_arr = preprocessing_obj.fit_transform(feature_eng_train_df)
             test_arr = preprocessing_obj.transform(feature_eng_test_df)
 
+            cols = numerical_columns+categorical_columns+[target_column_name]
+            
             transformed_train_df = pd.DataFrame(np.c_[train_arr,target_feature_train_df],
-                                            columns=numerical_columns+train_missing_indicators+categorical_columns+[target_column_name])
+                                            columns=cols)
+                                            
             transformed_test_df = pd.DataFrame(np.c_[test_arr,target_feature_test_df],
-                                            columns=numerical_columns+test_missing_indicators+categorical_columns+[target_column_name])
+                                            columns=cols)
 
             transformed_train_dir = self.data_transformation_config.transformed_train_dir
             transformed_test_dir = self.data_transformation_config.transformed_test_dir

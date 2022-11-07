@@ -2,12 +2,12 @@ import os,sys
 import pandas as pd
 import numpy as np
 from Backorder.contants import *
-from Backorder.util.util import save_object
+from Backorder.util.util import save_object, write_yaml_file
 from Backorder.entity.config_entity import ModelTrainerConfig
 from Backorder.entity.artifact_entity import ModelTrainerArtifact, DataTransformationArtifact
 from Backorder.logger import logging
 from Backorder.exception import ApplicationException
-from sklearn.metrics import f1_score, roc_auc_score
+from sklearn.metrics import f1_score, roc_auc_score, roc_curve
 from sklearn.model_selection import StratifiedKFold
 from imblearn.ensemble import BalancedRandomForestClassifier, EasyEnsembleClassifier
 from sklearn.model_selection import GridSearchCV
@@ -143,23 +143,40 @@ class Model_Trainer:
             if easy_ensemble_test_auc_score > balanced_rf_test_auc_score:
                 if( easy_ensemble[1]-easy_ensemble_test_auc_score) < (balanced_rf[1]-balanced_rf_test_auc_score):
                     model_name="EasyEnsemble"
+                    roc_score=easy_ensemble_test_auc_score
                     best_model = easy_ensemble
                 elif balanced_rf_test_auc_score>self.model_trainer_config.base_accuracy:
                     model_name="Balanced Random Forest"
+                    roc_score=balanced_rf_test_auc_score
                     best_model = balanced_rf
 
             else:
                 if( easy_ensemble[1]-easy_ensemble_test_auc_score) > (balanced_rf[1]-balanced_rf_test_auc_score):
                     model_name="Balanced Random Forest"
+                    roc_score=balanced_rf_test_auc_score
                     best_model = balanced_rf
                 elif easy_ensemble_test_auc_score>self.model_trainer_config.base_accuracy:
                     model_name="EasyEnsemble"
+                    roc_score=easy_ensemble_test_auc_score
+                    best_model = easy_ensemble
                     best_model = easy_ensemble
 
             logging.info(f"{model_name} model is selected......")
-            return best_model
+            return (best_model,roc_score)
         except Exception as e:
             raise ApplicationException(e,sys) from e
+
+    def find_optimum_threshold(self, model,X_test, y_test)->int:
+        try:
+            logging.info("Finding optimum threshold.....")
+            fpr, tpr, thresholds = roc_curve(y_test, model.predict_proba(X_test)[:,1])
+            J = tpr - fpr
+            ix = np.argmax(J)
+            best_threshold = thresholds[ix]
+            logging.info(f"Threshold found!!!.....Best Threshold = {best_threshold}")
+            return best_threshold
+        except Exception as e:
+            raise ApplicationException(e, sys) from e
 
     def initiate_model_training(self):
         try:
@@ -182,7 +199,10 @@ class Model_Trainer:
             test_input_feature = test_df.iloc[:,:-1]
             test_target_feature = test_df.iloc[:,-1]
 
-            trained_model = self.best_model_selector(train_input_feature, train_target_feature, test_input_feature, test_target_feature)
+            trained_model = self.best_model_selector(train_input_feature, 
+                                            train_target_feature, test_input_feature, test_target_feature)[0]
+
+            threshold = self.find_optimum_threshold(trained_model,test_input_feature,test_target_feature)
             
             logging.info("Saving best model object file")
             trained_model_object_file_path = self.model_trainer_config.trained_model_file_path
@@ -190,10 +210,21 @@ class Model_Trainer:
             save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY, SERVING_MODEL_NAME_KEY,
                                  os.path.basename(trained_model_object_file_path)),obj=trained_model)
 
+            
+            logging.info("Saving model yaml file........")
+            model_details = {"Serving_Model":{"date":CURRENT_TIME_STAMP,
+                                              "model": trained_model_object_file_path},
+                                              "roc_auc_score":trained_model[1],
+                                              "threshold":threshold}
+
+            write_yaml_file(MODEL_YAML_FILE_PATH,model_details)
+            logging.info("Model yaml created successfully!!!")   
 
             model_trainer_artifact = ModelTrainerArtifact(is_trained=True, 
                                                           message="Model Training Done!!",
-                                                          trained_model_file_path=trained_model_object_file_path)
+                                                          trained_model_file_path=trained_model_object_file_path,
+                                                          roc_auc_score=trained_model[1],
+                                                          threshold = threshold)
             
             logging.info(f"Model Trainer Artifact: {model_trainer_artifact}")
             return model_trainer_artifact
