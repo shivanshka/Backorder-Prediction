@@ -163,7 +163,7 @@ class Model_Trainer:
 
 
             logging.info(f"{model_name} model is selected......")
-            return (best_model,roc_score)
+            return (best_model,float(roc_score))
         except Exception as e:
             raise ApplicationException(e,sys) from e
 
@@ -175,7 +175,7 @@ class Model_Trainer:
             ix = np.argmax(J)
             best_threshold = thresholds[ix]
             logging.info(f"Threshold found!!!.....Best Threshold = {best_threshold}")
-            return best_threshold
+            return float(best_threshold)
         except Exception as e:
             raise ApplicationException(e, sys) from e
 
@@ -201,22 +201,22 @@ class Model_Trainer:
             test_target_feature = test_df.iloc[:,-1]
 
             trained_model = self.best_model_selector(train_input_feature, 
-                                            train_target_feature, test_input_feature, test_target_feature)[0]
+                                            train_target_feature, test_input_feature, test_target_feature)
 
-            threshold = self.find_optimum_threshold(trained_model,test_input_feature,test_target_feature)
+            threshold = self.find_optimum_threshold(trained_model[0],test_input_feature,test_target_feature)
             
             logging.info("Saving best model object file")
             trained_model_object_file_path = self.model_trainer_config.trained_model_file_path
-            save_object(file_path=trained_model_object_file_path, obj=trained_model)
+            save_object(file_path=trained_model_object_file_path, obj=trained_model[0])
             save_object(file_path=os.path.join(ROOT_DIR,PIKLE_FOLDER_NAME_KEY, SERVING_MODEL_NAME_KEY,
-                                 os.path.basename(trained_model_object_file_path)),obj=trained_model)
+                                 os.path.basename(trained_model_object_file_path)),obj=trained_model[0])
 
             
             logging.info("Saving model yaml file........")
             model_details = {"Serving_Model":{"date":CURRENT_TIME_STAMP,
-                                              "model": trained_model_object_file_path},
+                                              "model": trained_model_object_file_path,
                                               "roc_auc_score":trained_model[1],
-                                              "threshold":threshold}
+                                              "threshold":float(threshold)}}
 
             write_yaml_file(MODEL_YAML_FILE_PATH,model_details)
             logging.info("Model yaml created successfully!!!")   
