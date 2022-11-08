@@ -11,6 +11,7 @@ from sklearn.metrics import f1_score, roc_auc_score, roc_curve
 from sklearn.model_selection import StratifiedKFold
 from imblearn.ensemble import BalancedRandomForestClassifier, EasyEnsembleClassifier
 from sklearn.model_selection import GridSearchCV
+import tqdm
 
 
 class Model_Trainer:
@@ -63,7 +64,7 @@ class Model_Trainer:
             train_auc_scores = []
             test_auc_scores = []
             
-            for fold, (train_index, test_index) in enumerate(skf.split(X_train, y_train)):
+            for fold, (train_index, test_index) in tqdm(enumerate(skf.split(X_train, y_train))):
                 x_train, Y_train  = X_train.iloc[train_index], y_train[train_index]
                 x_test, Y_test = X_train.iloc[test_index], y_train[test_index]
                 
@@ -77,7 +78,7 @@ class Model_Trainer:
                 train_auc_scores.append(train_auc)
                 test_auc_scores.append(test_auc) 
             
-            logging.info(f"Fold: {fold} done!!!...")
+                logging.info(f"Fold: {fold} done!!!...")
             logging.info(f"Train Mean ROC AUC Score for 5 fold : {np.mean(train_auc_scores)}")
             logging.info(f"Validation Mean ROC AUC Score for 5 fold : {np.mean(test_auc_scores)}")
             return (model, np.mean(train_auc_scores))
@@ -96,7 +97,7 @@ class Model_Trainer:
             train_auc_scores = []
             test_auc_scores = []
             
-            for fold, (train_index, test_index) in enumerate(skf.split(X_train, y_train)):
+            for fold, (train_index, test_index) in tqdm(enumerate(skf.split(X_train, y_train))):
                 x_train, Y_train  = X_train.iloc[train_index], y_train[train_index]
                 x_test, Y_test = X_train.iloc[test_index], y_train[test_index]
                 
@@ -110,7 +111,7 @@ class Model_Trainer:
                 train_auc_scores.append(train_auc)
                 test_auc_scores.append(test_auc)
             
-            logging.info(f"Fold: {fold} done!!!...")
+                logging.info(f"Fold: {fold} done!!!...")
             logging.info(f"Train Mean ROC AUC Score for 5 fold : {np.mean(train_auc_scores)}")
             logging.info(f"Validation Mean ROC AUC Score for 5 fold : {np.mean(test_auc_scores)}")
             return (model, np.mean(train_auc_scores))
