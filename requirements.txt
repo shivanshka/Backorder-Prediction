@@ -9,5 +9,6 @@ PyYAML
 pyunpack
 dill
 evidently
+tqdm
 imblearn
 -e .
