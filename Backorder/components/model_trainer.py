@@ -11,7 +11,7 @@ from sklearn.metrics import f1_score, roc_auc_score, roc_curve
 from sklearn.model_selection import StratifiedKFold
 from imblearn.ensemble import BalancedRandomForestClassifier, EasyEnsembleClassifier
 from sklearn.model_selection import GridSearchCV
-import tqdm
+from tqdm import tqdm
 
 
 class Model_Trainer:
