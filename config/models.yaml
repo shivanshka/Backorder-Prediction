@@ -1,0 +1,6 @@
+Serving_Model:
+  date: 2022-11-08-23-37-15
+  model: G:\Shivansh\iNeuron\Internship\Backorder Prediction - Project 3\Backorder
+    Prediction\Backorder_Prediction_Pipeline\artifact\model_trainer\2022-11-02-13-13-13\model.pkl
+  roc_auc_score: 0.93
+  threshold: 0.4988456729116645
