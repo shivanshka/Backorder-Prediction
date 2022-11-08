@@ -121,20 +121,20 @@ class Model_Trainer:
     def best_model_selector(self, X_train, y_train, X_test, y_test):
         try:
             logging.info(f'{"*"*20} Training Easy Ensemble Classifier {"*"*20}')
-            easy_ensemble = self.EasyEnsemble_Classifier(X_train, y_train)[0]
+            easy_ensemble = self.EasyEnsemble_Classifier(X_train, y_train)
             
             logging.info(f"Calculating Test ROC AUC Score..........")
-            easy_test_preds = easy_ensemble.predict_proba(X_test)[:,1]
+            easy_test_preds = easy_ensemble[0].predict_proba(X_test)[:,1]
             easy_ensemble_test_auc_score = roc_auc_score(y_test, easy_test_preds)
             logging.info(f"Test ROC AUC Score: {easy_ensemble_test_auc_score}")
 
             logging.info(f'{"*"*20} Training Easy Ensemble Classifier Completed Successfully!! {"*"*20}')
 
             logging.info(f'{"*"*20} Training Balanced RandomForest Classifier {"*"*20}')
-            balanced_rf = self.BalancedRF_Classifier(X_train, y_train)[0]
+            balanced_rf = self.BalancedRF_Classifier(X_train, y_train)
 
             logging.info(f"Calculating Test ROC AUC Score..........")
-            brf_test_preds = balanced_rf.predict_proba(X_test)[:,1]
+            brf_test_preds = balanced_rf[0].predict_proba(X_test)[:,1]
             balanced_rf_test_auc_score = roc_auc_score(y_test, brf_test_preds)
             logging.info(f"Test ROC AUC Score: {balanced_rf_test_auc_score}")
 
@@ -145,22 +145,22 @@ class Model_Trainer:
                 if( easy_ensemble[1]-easy_ensemble_test_auc_score) < (balanced_rf[1]-balanced_rf_test_auc_score):
                     model_name="EasyEnsemble"
                     roc_score=easy_ensemble_test_auc_score
-                    best_model = easy_ensemble
+                    best_model = easy_ensemble[0]
                 elif balanced_rf_test_auc_score>self.model_trainer_config.base_accuracy:
                     model_name="Balanced Random Forest"
                     roc_score=balanced_rf_test_auc_score
-                    best_model = balanced_rf
+                    best_model = balanced_rf[0]
 
             else:
                 if( easy_ensemble[1]-easy_ensemble_test_auc_score) > (balanced_rf[1]-balanced_rf_test_auc_score):
                     model_name="Balanced Random Forest"
                     roc_score=balanced_rf_test_auc_score
-                    best_model = balanced_rf
+                    best_model = balanced_rf[0]
                 elif easy_ensemble_test_auc_score>self.model_trainer_config.base_accuracy:
                     model_name="EasyEnsemble"
                     roc_score=easy_ensemble_test_auc_score
-                    best_model = easy_ensemble
-                    best_model = easy_ensemble
+                    best_model = easy_ensemble[0]
+
 
             logging.info(f"{model_name} model is selected......")
             return (best_model,roc_score)
