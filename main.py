@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 from Backorder.pipeline.prediction_pipeline import PredictionServices
 from Backorder.pipeline.training_pipeline import Training_Pipeline
 from Backorder.contants import *
+from Backorder.util.util import read_yaml_file
 from Backorder.logger import logging
 import os
 import sys
@@ -49,22 +50,17 @@ def bulk_predict():
 @cross_origin()
 def single_predict():
     try:   
-        data = {'date': request.form['date'],
-                'month': int(request.form['month']),
-                'hour': int(request.form['hour']),
-                'season': int(request.form['season']),
-                'weekday': int(request.form['weekday']),
-                'is_holiday': int(request.form['is_holiday']),
-                'working_day': int(request.form['working']),
-                'weather_sit': int(request.form['weather_sit']),
-                'is_covid': int(request.form['is_covid']),
-                'temp': float(request.form['temp']),
-                'wind': float(request.form['wind']),
-                'humidity': float(request.form['humidity'])}
+        data={}
+        schema = read_yaml_file(file_path=SCHEMA_FILE_PATH)
+        for feature in schema[NUMERICAL_COLUMN_KEY]+schema[CATEGORICAL_COLUMN_KEY]:
+            if feature.endswith("avg"):
+                data[feature] = float(request.form[feature])
+            else:
+                data[feature] = int(request.form[feature])
 
         pred = PredictionServices()
         output = pred.initiate_single_prediction(data)
-        flash(f"Predicted Demand for Bike for given conditions: {output}","success")
+        flash(output,"success")
         return redirect(url_for('home'))
     except Exception as e:
         flash(f'Something went wrong: {e}', 'danger')

@@ -50,6 +50,17 @@ class PredictionServices:
         self.schema_file_path = self.data_validation_config.schema_file_path
         self.dataset_schema = read_yaml_file(file_path=self.schema_file_path)
 
+    """def missing_indicators(self,dff:pd.DataFrame)->list:
+        missing_ind_num = []
+        missing_ind_cat = []
+        for feature, val in dff.isnull().sum().to_dict().items():
+            if val != 0:
+                if feature in self.dataset_schema[NUMERICAL_COLUMN_KEY]:
+                    missing_ind_num.append(f"{feature}_missing_indicator")
+                else:
+                    missing_ind_cat.append(f"{feature}_missing_indicator")
+        return (missing_ind_num,missing_ind_cat)"""
+
     def initiate_bulk_prediction(self):
         """
         Function to predict from saved trained model for entire dataset. It returns the original dataset \n
@@ -71,34 +82,27 @@ class PredictionServices:
             if data_validation_status:
                 # Reading uploaded .CSV file in pandas
                 data_df = pd.read_csv(self.path)
-                data_df['total_count'] = 0
-                col = ['date','year','month','hour','season','weekday','is_holiday','working_day','total_count',
-                    'temp','wind','humidity','weather_sit','is_covid']
                 
                 logging.info("Feature Engineering applied !!!")
-                featured_eng_data = pd.DataFrame(self.fe_obj.transform(data_df),columns=col)
-                featured_eng_data.drop(columns="total_count", inplace=True)
-                
-                date_cols = featured_eng_data.loc[:,['date','year','month','hour']]
+                featured_eng_data = self.fe_obj.transform(data_df)
 
-                cols = ['date','year','month','hour','season','weekday','is_holiday','working_day','weather_sit',
-                'is_covid','temp','wind','humidity']
-                data_df = data_df[~data_df.duplicated(subset=["date","month","hour"],keep='last')]
-                data_df.drop(columns="total_count",inplace=True)
+                #missing_indicators = self.missing_indicators(featured_eng_data)
+                
+                numerical_columns = self.dataset_schema[NUMERICAL_COLUMN_KEY] 
+                categorical_columns = self.dataset_schema[CATEGORICAL_COLUMN_KEY]
 
                 logging.info("Data Preprocessing Done!!!")
                 # Applying preprocessing object on the data
-                transformed_data = pd.DataFrame(np.c_[date_cols,self.preprocessing_obj.transform(featured_eng_data)],columns=cols)
-                
-                transformed_data.drop(columns=["year"], inplace=True)
-                transformed_data.set_index("date",inplace=True)
+                cols = numerical_columns+categorical_columns
+
+                transformed_data= pd.DataFrame(self.preprocessing_obj.transform(featured_eng_data),columns=cols)
                 
                 # Convertng datatype of feature accordingly
                 transformed_data=transformed_data.infer_objects()
 
                 # Predicting from the saved model object
-                prediction = self.model_obj.predict(transformed_data)
-                data_df["predicted_demand"] = prediction
+                prediction_prob_arr = self.model_obj.predict_proba(transformed_data)
+                data_df["Will_go_on_Backorder"] = np.where(prediction_prob_arr>THRESHOLD,1,0)
                 logging.info("Prediction from model done")
 
                 logging.info("Saving prediction file for sending it to the user")
@@ -130,19 +134,21 @@ class PredictionServices:
             
             # Converting passed data into DataFrame
             df = pd.DataFrame([data])
-            date_cols = df.loc[:,["date","month","hour"]]
 
             # Applying preprocessing object on the data
-            preprocessed_df = pd.DataFrame(np.c_[date_cols,self.preprocessing_obj.transform(df.drop(columns=["date","month","hour"]))],
-            columns=df.columns)
-            preprocessed_df.set_index("date",inplace=True)
-
+            preprocessed_df = pd.DataFrame(self.preprocessing_obj.transform(),columns=df.columns)
+            
             # Changing datatype of features accordingly
             preprocessed_df = preprocessed_df.infer_objects()
 
             # Predicting from the saved model
-            prediction = self.model_obj.predict(preprocessed_df)
+            prediction_prob = self.model_obj.predict_proba(preprocessed_df)
+
+            if prediction_prob >= THRESHOLD:
+                prediction = "Product will go on BACKORDER!!!"
+            else:
+                prediction = "Product will NOT go on BACKORDER!!!"
             logging.info(f"{'*'*20} Single Prediction Complete {'*'*20}")
-            return round(prediction[0])
+            return prediction
         except Exception as e:
             raise ApplicationException(e,sys) from e
