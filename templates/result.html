@@ -141,91 +141,56 @@
                     <!-- 1st row -->
                     <div class="row">
                         <div class="col">
-                            <label>Date</label>
-                            <input class="form-control" placeholder="Enter date in yyyy-mm-dd format" type="text" aria-label="default input example"
-                                name="date">
+                            <label>Current inventory level</label>
+                            <input class="form-control" placeholder="Enter current inventory level of product" type="text" aria-label="default input example"
+                                name="national_inv">
                         </div>
                         <div class="col">
-                            <label>Month</label>
-                            <select class="form-select" aria-label="Default select example" name="month">
-                                <option selected>Select Month</option>
-                                <option value="1">January</option>
-                                <option value="2">Febraury</option>
-                                <option value="3">March</option>
-                                <option value="4">April</option>
-                                <option value="5">May</option>
-                                <option value="6">June</option>
-                                <option value="7">July</option>
-                                <option value="8">August</option>
-                                <option value="9">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
+                            <label>Lead Time</label>
+                            <input class="form-control" placeholder="Enter lead time in inventory management" type="text" aria-label="default input example"
+                                name="lead_time">
                         </div>
                     </div>
 
                     <!-- 2nd row -->
                     <div class="row my-2">
                         <div class="col">
-                            <label>Hour</label>
-                            <input class="form-control" placeholder="Enter hour between 0 to 23" type="text" aria-label="default input example"
-                                name="hour">
+                            <label>In-Transit Quantity</label>
+                            <input class="form-control" placeholder="Enter quantities of product in transit" type="text" aria-label="default input example"
+                                name="in_transit_qty">
                         </div>
                         <div class="col">
-                            <label>Season</label>
-                            <select class="form-select" aria-label="Default select example" name="season">
-                                <option selected>Select Season</option>
-                                <option value="1">Winter</option>
-                                <option value="2">Spring</option>
-                                <option value="3">Summer</option>
-                                <option value="4">Fall</option>
-                            </select>
+                            <label>Next 3 months Sale Forecast</label>
+                            <input class="form-control" placeholder="Enter sale forcast for next 3 month" type="text" aria-label="default input example"
+                                name="forecast_3_month">
                         </div>
                     </div>
 
                     <!-- 3rd row -->
                     <div class="row my-2">
                         <div class="col">
-                            <label>Weekday</label>
-                            <select class="form-select" aria-label="Default select example" name="weekday">
-                                <option selected>Select Weekday</option>
-                                <option value="0">Monday</option>
-                                <option value="1">Tuesday</option>
-                                <option value="2">Wednesday</option>
-                                <option value="3">Thursday</option>
-                                <option value="4">Friday</option>
-                                <option value="5">Saturday</option>
-                                <option value="6">Sunday</option>
-                            </select>
+                            <label>Next 6 months Sale Forecast</label>
+                            <input class="form-control" placeholder="Enter sale forcast for next 6 month" type="text" aria-label="default input example"
+                                name="forecast_6_month">
                         </div>
                         <div class="col">
-                            <label>Holiday</label>
-                            <select class="form-select" aria-label="Default select example" name="is_holiday">
-                                <option selected>Select</option>
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
+                            <label>Next 9 months Sale Forecast</label>
+                            <input class="form-control" placeholder="Enter sale forcast for next 9 month" type="text" aria-label="default input example"
+                                name="forecast_9_month">
                         </div>
                     </div>
 
                     <!-- 4th row -->
                     <div class="row my-2">
                         <div class="col">
-                            <label>Working Day</label>
-                            <select class="form-select" aria-label="Default select example" name="working">
-                                <option selected>Select</option>
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
+                            <label>Last month Sale</label>
+                            <input class="form-control" placeholder="Enter sold quantities for last month" type="text" aria-label="default input example"
+                                name="sales_1_month">
                         </div>
                         <div class="col">
-                            <label>Covid Year</label>
-                            <select class="form-select" aria-label="Default select example" name="is_covid">
-                                <option selected>Select</option>
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
+                            <label>Last 3 month Sale</label>
+                            <input class="form-control" placeholder="Enter sold quantities for last 3 month" type="text" aria-label="default input example"
+                                name="sales_3_month">
                         </div>
                     </div>
 
@@ -233,34 +198,71 @@
                     <!-- 5th row -->
                     <div class="row my-2">
                         <div class="col">
-                            <label>Weather Condition</label>
-                            <select class="form-select" aria-label="Default select example" name="weather_sit">
-                                <option selected>Select Condition</option>
-                                <option value="1">Clear, Few clouds, Partly cloudy, Partly cloudy</option>
-                                <option value="2"> Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist</option>
-                                <option value="3">Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds</option>
-                                <option value="4">Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog</option>
-                            </select>
+                            <label>Last 6 month Sale</label>
+                            <input class="form-control" placeholder="Enter sold quantities for last 6 month" type="text" aria-label="default input example"
+                                name="sales_6_month">
                         </div>
                         <div class="col">
-                            <label>Temperature</label>
-                            <input class="form-control" placeholder="Enter temperature in celcius" type="text" aria-label="default input example"
-                                name="temp">
+                            <label>Last 9 month Sale</label>
+                            <input class="form-control" placeholder="Enter sold quantities for last 9 month" type="text" aria-label="default input example"
+                                name="sales_9_month">
                         </div>
                     </div>
 
-                    <!-- 6th row -->
+                     <!-- 6th row -->
+                     <div class="row my-2">
+                        <div class="col">
+                            <label>Minimum stock level</label>
+                            <input class="form-control" placeholder="Enter Minimum stock level" type="text" aria-label="default input example"
+                                name="min_bank">
+                        </div>
+                        <div class="col">
+                            <label>Overdue Quantity</label>
+                            <input class="form-control" placeholder="Enter quantities overdue" type="text" aria-label="default input example"
+                                name="pieces_past_due">
+                        </div>
+                    </div>
+
+                     <!-- 7th row -->
+                     <div class="row my-2">
+                        <div class="col">
+                            <label>6 months Average Performance</label>
+                            <input class="form-control" placeholder="Enter last 6 months average performance" type="text" aria-label="default input example"
+                                name="perf_6_month_avg">
+                        </div>
+                        <div class="col">
+                            <label>12 months Average Performance</label>
+                            <input class="form-control" placeholder="Enter last 6 months average performance" type="text" aria-label="default input example"
+                                name="perf_12_month_avg">
+                        </div>
+                    </div>
+
+                     <!-- 8th row -->
+                     <div class="row my-2">
+                        <div class="col">
+                            <label>Amount of overdue stock orders</label>
+                            <input class="form-control" placeholder="Enter amount of overdue stock orders" type="text" aria-label="default input example"
+                                name="local_bo_qty">
+                        </div>
+                        <div class="col">
+                            <label>Deck Risk</label>
+                                <select class="form-select" aria-label="Default select example" name="deck_risk">
+                                    <option selected>Select</option>
+                                    <option value="0.22957058049838255">Yes</option>
+                                    <option value="0.7704294195016175">No</option>
+                                </select>
+                        </div>
+                    </div>
+
+                    <!-- 9th row -->
                     <div class="row my-2">
                         <div class="col">
-                            <label>Wind Speed</label>
-                            <input class="form-control" placeholder="Enter wind speed in kmph" type="text" aria-label="default input example"
-                                name="wind">
-                        </div>
-
-                        <div class="col">
-                            <label>Humidity</label>
-                            <input class="form-control" placeholder="Enter humidity in %" type="text" aria-label="default input example"
-                                name="humidity">
+                            <label>Packaging and Prodiction Risk</label>
+                                <select class="form-select" aria-label="Default select example" name="ppap_risk">
+                                    <option selected>Select</option>
+                                    <option value="0.1207647553707061">Yes</option>
+                                    <option value="0.8792352446292939">No</option>
+                                </select>
                         </div>
 
                     </div>

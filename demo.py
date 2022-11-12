@@ -1,6 +1,7 @@
 from Backorder.pipeline.training_pipeline import Training_Pipeline
 from Backorder.logger import logging
 
+
 def main():
     try:
         train = Training_Pipeline()

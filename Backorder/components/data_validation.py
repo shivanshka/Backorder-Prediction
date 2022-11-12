@@ -28,7 +28,7 @@ class Prediction_Validation:
             # Finding no of columns in the dataset
             no_of_columns = data.shape[1]
             # Checking if the no of columns in dataset is as per defined schema
-            if no_of_columns != self.dataset_schema["NumberOfColumns"]:
+            if no_of_columns != self.dataset_schema["NumberOfColumns"]-1:
                 raise Exception(f"No of columns is not correct in file: [{file}]!!!")
 
             columns = list(data.columns)

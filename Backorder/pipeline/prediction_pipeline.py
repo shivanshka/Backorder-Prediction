@@ -91,17 +91,17 @@ class PredictionServices:
                 numerical_columns = self.dataset_schema[NUMERICAL_COLUMN_KEY] 
                 categorical_columns = self.dataset_schema[CATEGORICAL_COLUMN_KEY]
 
-                logging.info("Data Preprocessing Done!!!")
+                
                 # Applying preprocessing object on the data
                 cols = numerical_columns+categorical_columns
 
                 transformed_data= pd.DataFrame(self.preprocessing_obj.transform(featured_eng_data),columns=cols)
-                
+                logging.info("Data Preprocessing Done!!!")
                 # Convertng datatype of feature accordingly
                 transformed_data=transformed_data.infer_objects()
 
                 # Predicting from the saved model object
-                prediction_prob_arr = self.model_obj.predict_proba(transformed_data)
+                prediction_prob_arr = self.model_obj.predict_proba(transformed_data)[:,1]
                 data_df["Will_go_on_Backorder"] = np.where(prediction_prob_arr>THRESHOLD,1,0)
                 logging.info("Prediction from model done")
 
