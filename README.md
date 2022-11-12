@@ -13,7 +13,7 @@ link:
 
 ## Project Architecture
 We have used layered architecture for carrying out below flow actions:
-![img]()
+!(img)[https://github.com/shivanshka/Backorder-Prediction/blob/main/Architecture%20Design.png]
 
 ## Tools Used
 - Jupyter Notebook
