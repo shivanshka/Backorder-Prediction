@@ -136,13 +136,13 @@ class PredictionServices:
             df = pd.DataFrame([data])
 
             # Applying preprocessing object on the data
-            preprocessed_df = pd.DataFrame(self.preprocessing_obj.transform(),columns=df.columns)
+            preprocessed_df = pd.DataFrame(self.preprocessing_obj.transform(df),columns=df.columns)
             
             # Changing datatype of features accordingly
             preprocessed_df = preprocessed_df.infer_objects()
 
             # Predicting from the saved model
-            prediction_prob = self.model_obj.predict_proba(preprocessed_df)
+            prediction_prob = self.model_obj.predict_proba(preprocessed_df)[:,1]
 
             if prediction_prob >= THRESHOLD:
                 prediction = "Product will go on BACKORDER!!!"

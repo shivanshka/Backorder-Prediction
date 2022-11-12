@@ -53,7 +53,7 @@ def single_predict():
         data={}
         schema = read_yaml_file(file_path=SCHEMA_FILE_PATH)
         for feature in schema[NUMERICAL_COLUMN_KEY]+schema[CATEGORICAL_COLUMN_KEY]:
-            if feature.endswith("avg"):
+            if feature.endswith("avg") or feature.endswith("risk"):
                 data[feature] = float(request.form[feature])
             else:
                 data[feature] = int(request.form[feature])
