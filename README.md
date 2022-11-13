@@ -9,7 +9,7 @@ The objective of this project is to create a solution for above problem which ca
 app link: https://backorder-prediction-ml.herokuapp.com/
 
 ## Project Demo Video
-link: 
+link: https://youtu.be/s6lLTewy2g8
 
 ## Project Architecture
 We have used layered architecture for carrying out below flow actions:
