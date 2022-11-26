@@ -14,8 +14,10 @@
             padding-right: 20px;
             font-weight: bold;
             width: 100%;
-            background-color: #cce2f5;
-        }
+            background-image: url("./static/img/background.jpg");
+            background-blend-mode: darken;
+            background-size: cover;
+		}
 
         .file-input {
             font-weight: bold;
@@ -26,35 +28,46 @@
             text-align: center;
             font-weight: bold;
 
-            font-size: 30px;
-            background-color: #f5ed85;
-            padding-top: 10px;
-            font-weight: bold;
-            padding-bottom: 10px;
-            color: #273582;
-            font-family: 'Lucida Sans';
+            font-size: 45px;
+            /*background-color: #f5ed85;*/
+            background-image: linear-gradient(to right, rgb(180, 126, 9) , rgb(212, 243, 36));
+            padding-top: 1px;
+            font-weight: bolder;
+            padding-bottom: 1px;
+            color: #b3119d;
+            -webkit-text-stroke: 0.5px rgb(255, 255, 255);
+            text-shadow: 2px 2px 4px #000000;
+            font-family:'Courier New', Courier, monospace;
         }
         .header_1{
             padding-left: 50px;
+            background-image: url("./static/img/444.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+	        height: 70px;
         }
         .logo_image{
-            display: inline-block;
-            width:0%;
+            /*display: inline-block;*/
+            float:left;
+            
         }
         .logo_title{
-            display: inline-block;
+            display: inline;
             text-align: left;
             vertical-align: bottom;
+            -webkit-text-stroke: 1px rgb(236, 186, 22);
             width:90%;
-            ;
+            
         }
         .header2{
-            display: inline;
+            display: table-cell;
             font-size: 35px;
-            color: #967008;
-            font-weight: bold;
-            padding-left: 260px;
-            font-family: 'Gill Sans MT';
+            color: #000000;
+            font-weight: bolder;
+            padding-left: 10px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	        vertical-align: bottom;
+	        height: 70px;
         }
         .footer{
             position: relative;
@@ -81,7 +94,80 @@
             height: 70px;
         }
         .col{
-            padding-left: 50px;
+            padding-left: 20px;
+        }
+		.input_box{
+			background-color: #191a19bd;
+            padding: 10px;
+			border: 2px solid rgb(173, 174, 238);
+            border-radius: 10px;
+            color: #ffffff;
+            -webkit-text-stroke: 0.4px black;
+            font-weight: bold;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+		}
+        .single_out{
+            background-color: #191a19bd;
+            padding: 10px;
+			border: 2px solid rgb(173, 174, 238);
+            border-radius: 10px; 
+            color: #ffffff;
+            -webkit-text-stroke: 0.4px black;
+            font-weight: bold;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        ul{
+            display: inline;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: rgba(51, 51, 51, 0);
+        }
+
+        li{
+            float: right;
+            /*border-right: 1px solid #bbb;*/
+            /*border-left: 2px solid #bbb;*/
+            padding-right: 5px;
+        }
+
+        li a {
+            display: block;
+            color: rgb(7, 7, 7);
+            text-align: center;
+            padding: 5px 16px;
+            text-decoration: none;
+            font-size: 13px;
+            border: 3px solid rgb(173, 174, 238);
+            font-weight: bold;
+            border-radius: 5px; 
+        }
+
+        li a:hover {
+            background-color: rgba(255, 238, 0, 0.61);
+        }
+        /*li:last-child {
+            border-right: none;
+        }*/
+        .my-3{
+            background-color: rgb(252, 240, 72);
+            color: #111;
+            font-weight: bold;
+        }
+        .message{
+            font-size: 20px;
+            font-style: oblique;
+        }
+        .bulk_class_label{
+            background-color: #313332bd;
+            padding: 0px 0px 5px 5px;
+            font-size: 30px;
+            border-radius: 5px;
+            color: antiquewhite;
+            -webkit-text-stroke: 0.8px black;
+            font-family: Cambria, Cochin, "Georgia", Times, 'Times New Roman', serif;
+            font-weight: bolder;
         }
     </style>
 
@@ -94,8 +180,17 @@
     <header class="header_1">
         <div class="logo_image">
             <a href="/" class="" data-image-width="430" data-image-height="117">
-                <img src="{{ url_for('static', filename='img/index.png') }}" class="logo">
+                <img src="{{ url_for('static', filename='img/index2.png') }}" class="logo">
             </a>
+        </div>
+        <div>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="/start_train">Model Retrain</a></li>
+                <li><a href="#contact">Single Prediction</a></li>
+                <li><a href="#news">Bulk Prediction</a></li>
+                <li><a class="active" href="#home">Home</a></li>
+            </ul>
         </div>
         <div class="logo_title">
             <h3 class="header2">Internship Project</h3>
@@ -109,21 +204,18 @@
         <div class="row">
             <!-- file input column -->
             <div class="col file-input">
-                <form action="/bulk_predict" method="POST" enctype="multipart/form-data">
+                <label class="bulk_class_label">Bulk Prediction</label>
+                <form class="input_box" action="/bulk_predict" method="POST" enctype="multipart/form-data">
                     <label for="">Upload dataset</label>
                     <div class="input-group mb-3 my-2">
                         <input type="file" multiple class="form-control" id="inputGroupFile01" name="files">
                     </div>
                     <center>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <button class="btn btn-primary my-2" type="submit">Predict</button>
+                            <button class="btn btn-primary my-3" type="submit">Predict</button>
                         </div>
                     </center>
                 </form>
-            </div>
-
-            <!-- user input column -->
-            <div class="col">
                 <!-- Alert Message -->
                 {% with message = get_flashed_messages(with_categories=true) %}
                 {% if message %}
@@ -137,7 +229,12 @@
                 {% endfor %}
                 {% endif %}
                 {% endwith %}
-                <form action="/single_predict" method="POST">
+            </div>
+
+            <!-- user input column -->
+            <div class="col">
+                <label class="bulk_class_label">Single Prediction</label>
+                <form class="single_out" action="/single_predict" method="POST">
                     <!-- 1st row -->
                     <div class="row">
                         <div class="col">
@@ -269,7 +366,7 @@
 
                     <center>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <button class="btn btn-primary my-2" type="submit">Predict</button>
+                            <button class="btn btn-primary my-3" type="submit">Predict</button>
                         </div>
                     </center>
 
@@ -289,7 +386,7 @@
         <a href="https://www.linkedin.com/in/shivansh-ka" class="linkedin" data-image-width="100" data-image-height="100" title="Developen Linkedin Id" target="_blank">
             <img src="{{ url_for('static', filename='img/linkied.png') }}" class="linkedin_image">
           </a>
-        <p class="footer-text">Created by Shivansh Kaushal and Chirag Sharma</p>
+        <p class="footer-text">Created by Shivansh Kaushal</p>
       </div></footer>
     
 </body>
